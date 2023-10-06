@@ -1,6 +1,4 @@
 const passport = require("passport");
-// const express = require("express");
-// const app = express();
 
 module.exports = (app) => {
   app.get(
@@ -10,4 +8,13 @@ module.exports = (app) => {
     })
   );
   app.get("/auth/google/callback", passport.authenticate("google"));
+
+  app.get("/api/logout", (req, res) => {
+    req.logout();
+  });
+
+  app.get("/api/current_user", (req, res) => {
+    // console.log("RESPONSE: ", req.user);
+    res.send(req.user);
+  });
 };

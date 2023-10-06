@@ -1,40 +1,29 @@
 const express = require("express");
-const { MongoClient, ServerApiVersion } = require("mongodb");
 const mongoose = require("mongoose");
+const cookieSession = require("cookie-session");
+const passport = require("passport");
+const keys = require("./config/keys");
 const app = express();
+
 require("./models/user");
 require("./services/passport");
-const keys = require("./config/keys");
+
+mongoose.connect(keys.mongoURI);
+
+app.use(
+  cookieSession({
+    maxAge: 30 * 24 * 60 * 60 * 100, // last for 30 days before exp
+    keys: [keys.cookieKey],
+    secret: "keyboard cat",
+  })
+);
+// handle auth
+app.use(passport.initialize());
+app.use(passport.session());
 
 // require("./routes/auth").(app);
 const authRoutes = require("./routes/auth");
 authRoutes(app);
-
-mongoose.connect(keys.mongoURI);
-
-// // Create a MongoClient with a MongoClientOptions object to set the Stable API version
-// const client = new MongoClient(keys.mongoURI, {
-//   serverApi: {
-//     version: ServerApiVersion.v1,
-//     strict: true,
-//     deprecationErrors: true,
-//   },
-// });
-// async function run() {
-//   try {
-//     // Connect the client to the server	(optional starting in v4.7)
-//     await client.connect();
-//     // Send a ping to confirm a successful connection
-//     await client.db("admin").command({ ping: 1 });
-//     console.log(
-//       "Pinged your deployment. You successfully connected to MongoDB!"
-//     );
-//   } finally {
-//     // Ensures that the client will close when you finish/error
-//     await client.close();
-//   }
-// }
-// run().catch(console.dir);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
