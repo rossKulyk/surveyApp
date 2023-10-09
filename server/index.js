@@ -10,6 +10,7 @@ require("./services/passport");
 
 mongoose.connect(keys.mongoURI);
 
+// middleware
 app.use(
   cookieSession({
     maxAge: 30 * 24 * 60 * 60 * 100, // last for 30 days before exp
@@ -17,7 +18,7 @@ app.use(
     secret: "keyboard cat",
   })
 );
-// handle auth
+// handle auth middlware
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -25,7 +26,7 @@ app.use(passport.session());
 const authRoutes = require("./routes/auth");
 authRoutes(app);
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);
 });
