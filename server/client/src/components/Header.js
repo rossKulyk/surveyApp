@@ -14,8 +14,9 @@ const Header = () => {
       );
     } else {
       return (
+        // to be refactored with ajax request later
         <li>
-          <a>Logout</a>
+          <a href="/api/logout">Logout</a>
         </li>
       );
     }
