@@ -4,8 +4,9 @@ import { FETCH_USER } from "./types";
 export const fetchUser = () => {
   return async (dispatch) => {
     try {
-      const response = await axios.get(`/api/current_user`);
-      dispatch({ type: FETCH_USER, payload: response });
+      const { data } = await axios.get(`/api/current_user`);
+      console.log("DATA:", data);
+      dispatch({ type: FETCH_USER, payload: data });
     } catch (error) {
       console.log(error);
     }
