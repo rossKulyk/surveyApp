@@ -1,4 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   const authState = useSelector((state) => state.auth);
@@ -26,9 +27,9 @@ const Header = () => {
   return (
     <nav>
       <div className="nav-wrapper">
-        <a href="#" className="left brand-logo">
+        <Link to={authState ? "/surveys" : "/"} className="left brand-logo">
           SurveyApp
-        </a>
+        </Link>
         <ul id="nav-mobile" className="right">
           <li>{renderContent()}</li>
         </ul>
