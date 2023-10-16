@@ -24,22 +24,15 @@ passport.use(
       clientSecret: keys.GOOGLE_CLIENT_SECRET,
       callbackURL: "/auth/google/callback",
     },
-    function (accessToken, refreshToken, profile, done) {
-      // console.log("accessToken:", accessToken);
-      // console.log("refreshToken:", refreshToken);
-      // console.log("profile:", profile);
-      // console.log("done:", done);
+    async (accessToken, refreshToken, profile, done) => {
       //identify user who's coming from OAuth flow
-      User.findOne({ googleId: profile.id }).then((existingUser) => {
-        if (existingUser) {
-          console.log("hello, its me :))");
-          done(null, existingUser);
-        } else {
-          new User({ googleId: profile.id }).save().then((user) => {
-            done(null, user);
-          });
-        }
-      });
+      const existingUser = await User.findOne({ googleId: profile.id });
+      if (existingUser) {
+        console.log("hello, its me :))");
+        done(null, existingUser);
+      }
+      const user = await new User({ googleId: profile.id }).save();
+      done(null, user);
     }
   )
 );
